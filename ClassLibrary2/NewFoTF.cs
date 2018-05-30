@@ -15,7 +15,7 @@ namespace NewFotF
 
         private int _NailDamageTracker;
 
-        public int defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades");
+        public int defaultNailDamage;
 
         /// <summary>
         /// Represents this Mod's instance.
@@ -57,6 +57,11 @@ namespace NewFotF
         public void OnAttack(AttackDirection dir)
         {
             Log("Attacking");
+            
+            if (defaultNailDamage == 0)
+            {
+                defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades")
+            }
 
             if (PlayerData.instance.GetInt("nailDamage") != defaultNailDamage)
             {
