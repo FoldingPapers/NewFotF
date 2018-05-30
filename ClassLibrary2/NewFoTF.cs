@@ -58,19 +58,19 @@ namespace NewFotF
         {
             Log("Attacking");
 
-            if (PlayerData.instance.nailDamage != defaultNailDamage)
+            if (PlayerData.instance.GetInt("nailDamage") != defaultNailDamage)
             {
-                PlayerData.instance.nailDamage = defaultNailDamage;
+                PlayerData.instance.GetInt("nailDamage") = defaultNailDamage;
 
-                if (PlayerData.instance.equippedCharm_6)
+                if (PlayerData.instance.GetBool("equippedCharm_6"))
                 {
                     Log("Stronger Attack");
 
-                    PlayerData.instance.nailDamage += 5 * (PlayerData.instance.maxHealth - PlayerData.instance.health);
+                    PlayerData.instance.SetInt("nailDamage", PlayerData.instance.GetInt("nailDamage") + 5 * (PlayerData.instance.GetInt("maxHealth") - PlayerData.instance.GetInt("health");
 
                     PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-                    _NailDamageTracker = PlayerData.instance.nailDamage;
+                    _NailDamageTracker = PlayerData.instance.GetInt("nailDamage");
 
                     Log("Set Nail Damage to to " + _NailDamageTracker);
 
