@@ -15,6 +15,8 @@ namespace NewFotF
 
         private int _NailDamageTracker;
 
+        public int defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades");
+
         /// <summary>
         /// Represents this Mod's instance.
         /// </summary>
@@ -41,8 +43,6 @@ namespace NewFotF
             //Here we are hooking into the AttackHook so we can modify the damage for the attack.
             ModHooks.Instance.AttackHook += OnAttack;
 
-            //Here want to hook into the AfterAttackHook to do something at the end of the attack animation.
-            ModHooks.Instance.AfterAttackHook += OnAfterAttack;
             Log("Initialized");
         }
 
@@ -57,25 +57,27 @@ namespace NewFotF
         public void OnAttack(AttackDirection dir)
         {
             Log("Attacking");
-            if (PlayerData.instance.equippedCharm_6)
+
+            if (PlayerData.instance.nailDamage != defaultNailDamage)
             {
-                Log("Stronger Attack");
+                PlayerData.instance.nailDamage = defaultNailDamage;
 
-                _tempNailDamage = PlayerData.instance.nailDamage; //Store the current nail damage.
+                if (PlayerData.instance.equippedCharm_6)
+                {
+                    Log("Stronger Attack");
 
-                Log("Set _tempNailDamage to " + _tempNailDamage);
+                    PlayerData.instance.nailDamage += 5 * (PlayerData.instance.maxHealth - PlayerData.instance.health);
 
+                    PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-                PlayerData.instance.nailDamage += 5 * (PlayerData.instance.maxHealth - PlayerData.instance.health); //Double the nail damage
+                    _NailDamageTracker = PlayerData.instance.nailDamage;
 
-                PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+                    Log("Set Nail Damage to to " + _NailDamageTracker);
 
-                _NailDamageTracker = PlayerData.instance.nailDamage;
-
-                Log("Set Nail Damage to to " + _NailDamageTracker);
-
-                return;
+                    return;
+                }
             }
+
         }
 
         /// <summary>
@@ -83,18 +85,7 @@ namespace NewFotF
         /// </summary>
         /// <remarks>After the attack is over, we need to reset the nail damage back to what it was.</remarks>
         /// <param name="dir"></param>
-        private void OnAfterAttack(AttackDirection dir)
-        {
-            Log("Finished Attacking");
 
-            PlayerData.instance.nailDamage = _tempNailDamage; //Attacking is done, we need to set the nail damage back to what it was before we crit.
-
-            PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
-            _NailDamageTracker = PlayerData.instance.nailDamage;
-
-            Log("Set Nail Damage to to " + _NailDamageTracker);
-        }
     }
 
 }
