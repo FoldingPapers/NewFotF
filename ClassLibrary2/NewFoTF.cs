@@ -11,8 +11,6 @@ namespace NewFotF
     public class NewFotF : Mod
     {
 
-        private int _tempNailDamage;
-
         private int _NailDamageTracker;
 
         public int defaultNailDamage;
@@ -57,21 +55,21 @@ namespace NewFotF
         public void OnAttack(AttackDirection dir)
         {
             Log("Attacking");
-            
-            if (defaultNailDamage == 0)
+
+            if (defaultNailDamage != 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades"))
             {
-                defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades")
+                defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades");
             }
 
             if (PlayerData.instance.GetInt("nailDamage") != defaultNailDamage)
             {
-                PlayerData.instance.GetInt("nailDamage") = defaultNailDamage;
+                PlayerData.instance.SetInt("nailDamage", defaultNailDamage);
 
                 if (PlayerData.instance.GetBool("equippedCharm_6"))
                 {
                     Log("Stronger Attack");
 
-                    PlayerData.instance.SetInt("nailDamage", PlayerData.instance.GetInt("nailDamage") + 5 * (PlayerData.instance.GetInt("maxHealth") - PlayerData.instance.GetInt("health");
+                    PlayerData.instance.SetInt("nailDamage", PlayerData.instance.GetInt("nailDamage") + 5 * (PlayerData.instance.GetInt("maxHealth") - PlayerData.instance.GetInt("health")));
 
                     PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
