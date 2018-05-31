@@ -56,39 +56,38 @@ namespace NewFotF
         {
             Log("Attacking");
 
-            if (defaultNailDamage != 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades"))
-            {
-                defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades");
-            }
+            defaultNailDamage = 5 + 4 * PlayerData.instance.GetInt("nailSmithUpgrades");
 
             if (PlayerData.instance.GetInt("nailDamage") != defaultNailDamage)
             {
                 PlayerData.instance.SetInt("nailDamage", defaultNailDamage);
-
-                if (PlayerData.instance.GetBool("equippedCharm_6"))
-                {
-                    Log("Stronger Attack");
-
-                    PlayerData.instance.SetInt("nailDamage", PlayerData.instance.GetInt("nailDamage") + 5 * (PlayerData.instance.GetInt("maxHealth") - PlayerData.instance.GetInt("health")));
-
-                    PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
-                    _NailDamageTracker = PlayerData.instance.GetInt("nailDamage");
-
-                    Log("Set Nail Damage to to " + _NailDamageTracker);
-
-                    return;
-                }
             }
+
+            if (PlayerData.instance.GetBool("equippedCharm_6"))
+            {
+                Log("Stronger Attack");
+
+                PlayerData.instance.SetInt("nailDamage",
+
+                    PlayerData.instance.GetInt("nailDamage") +
+
+                    4 * (PlayerData.instance.GetInt("maxHealth") - PlayerData.instance.GetInt("health")));
+
+                PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+
+                _NailDamageTracker = PlayerData.instance.GetInt("nailDamage");
+
+                Log("Set Nail Damage to to " + _NailDamageTracker);
+
+            }
+
+            /// <summary>
+            /// Reverts damage
+            /// </summary>
+            /// <remarks>After the attack is over, we need to reset the nail damage back to what it was.</remarks>
+            /// <param name="dir"></param>
 
         }
 
-        /// <summary>
-        /// Reverts damage
-        /// </summary>
-        /// <remarks>After the attack is over, we need to reset the nail damage back to what it was.</remarks>
-        /// <param name="dir"></param>
-
     }
-
 }
